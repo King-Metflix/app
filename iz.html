@@ -1,5 +1,84 @@
-<script>
-<!--
-document.write(unescape("%3Chtml%20lang%3D%22es%22%3E%0A%3Chead%3E%0A%3Cmeta%20name%3D%22robots%22%20content%3D%22noindex%2C%20nofollow%22%20/%3E%0A%3Cmeta%20name%3D%22referrer%22%20content%3D%22no-referrer%22%20/%3E%0A%3Ctitle%3EReproductor%3C/title%3E%0A%3Cstyle%20type%3D%22text/css%22%3E%0Abody%20%7B%0A%20%20%20margin%3A%200%3B%0A%20%20%20padding%3A%200%3B%0A%20%20%20overflow-y%3A%20hidden%3B%0A%7D%0A%3C/style%3E%0A%3Clink%20rel%3D%22stylesheet%22%20media%3D%22screen%22%20href%3D%22jw.css%22%3E%0A%3Cscript%20src%3D%22https%3A//ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js%22%3E%3C/script%3E%0A%3Cscript%3E%20jwplayer.key%20%3D%20%27XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo%27%3B%0A%3C/script%3E%0A%3C/head%3E%0A%3Cbody%3E%0A%3Cscript%20type%3D%22text/javascript%22%3E%0Afunction%20getParameterByName%28name%29%20%7B%0A%09name%20%3D%20name.replace%28/%5B%5C%5B%5D/%2C%20%22%5C%5B%22%29.replace%28/%5B%5C%5D%5D/%2C%20%22%5C%5D%22%29%3B%0A%09var%20regex%20%3D%20new%20RegExp%28%22%5B%5C%3F%26%5D%22%20+%20name%20+%20%22%3D%28%5B%5E%26%23%5D*%29%22%29%2C%0A%09results%20%3D%20regex.exec%28location.search%29%3B%0A%09return%20results%20%3D%3D%3D%20null%20%3F%20%22%22%20%3A%20decodeURIComponent%28results%5B1%5D.replace%28/%5C+/g%2C%20%22%20%22%29%29%3B%0A%7D%0A%0Avar%20get%20%3D%20getParameterByName%28%27get%27%29%3B%0Avar%20key%20%3D%20getParameterByName%28%27key%27%29%3B%0Avar%20key2%20%3D%20getParameterByName%28%27key2%27%29%3B%0A%3C/script%3E%0A%3Cdiv%20id%3D%22player%22%3E%3C/div%3E%0A%3Cscript%20type%3D%22text/javascript%22%3E%0Avar%20playerInstance%20%3D%20jwplayer%28%22player%22%29%3B%0A%0AplayerInstance.setup%28%7B%0A%09playlist%3A%20%5B%7B%0A%09%09%22sources%22%3A%20%5B%0A%09%09%09%7B%0A%09%09%09%09%22default%22%3A%20false%2C%0A%09%09%09%09%22type%22%3A%20%22dash%22%2C%0A%09%09%09%09%22file%22%3A%20atob%28get%29%2C%0A%09%09%09%09%22drm%22%3A%20%7B%0A%09%09%09%09%09%22clearkey%22%3A%20%7B%20%22keyId%22%3A%20atob%28key%29%2C%20%22key%22%3A%20atob%28key2%29%20%7D%0A%09%09%09%09%7D%2C%0A%09%09%09%09%22label%22%3A%20%220%22%0A%09%09%09%7D%0A%09%09%5D%0A%09%7D%5D%2C%0A%09width%3A%20%22100%25%22%2C%0A%09height%3A%20%22100%25%22%2C%0A%09aspectratio%3A%20%2216%3A9%22%2C%0A%20%20%20%20%20%20%20%20stretching%3A%20%22bestfit%22%2C%0A%09mediaid%3A%20%22player%22%2C%0A%20%20%20%20%20%20%20%20mute%3A%20false%2C%0A%09autostart%3A%20false%2C%0A%20%20%20%20%20%20%20%20language%3A%20%22es%22%2C%0A%20%20%20%20%20%20%20%20logo%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20file%3A%20%22%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20hide%3A%20%22false%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20position%3A%20%22top-left%22%0A%20%20%20%20%20%20%20%20%7D%2C%0A%09cast%3A%20%7B%7D%0A%09%0A%7D%29%3B%0AplayerInstance.on%28%27ready%27%2C%20function%28%29%20%7B%0A%20%20%20%20playerInstance.on%28%27audioTracks%27%2C%20function%28%29%20%7B%0A%20%20%20%20%20%20%20%20const%20tracks%20%3D%20playerInstance.getAudioTracks%28%29%3B%0A%20%20%20%20%20%20%20%20//console.log%28%27Available%20audio%20tracks%3A%27%2C%20tracks%29%3B%0A%20%20%20%20%20%20%20%20for%20%28let%20i%20%3D%200%3B%20i%20%3C%20tracks.length%3B%20i++%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20if%20%28tracks%5Bi%5D.language%20%3D%3D%3D%20%27es%27%29%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20playerInstance.setCurrentAudioTrack%28i%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20//console.log%28%27Selected%20Spanish%20audio%20track%3A%27%2C%20tracks%5Bi%5D%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20break%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%29%3B%0A%7D%29%3B%0A//%20Preview%20Hack%0Ajwplayer%28%29.play%28%29%3B%0Ajwplayer%28%29.setMute%28false%29%3B%0Ajwplayer%28%29.setControls%28true%29%3B%0A%0A%3C/script%3E%0A%3C/body%3E%0A"));
-//-->
+<html lang="es">
+<head>
+<meta name="robots" content="noindex, nofollow" />
+<meta name="referrer" content="no-referrer" />
+<title>Reproductor</title>
+<style type="text/css">
+body {
+   margin: 0;
+   padding: 0;
+   overflow-y: hidden;
+}
+</style>
+<link rel="stylesheet" media="screen" href="jw.css">
+<script src="https://ssl.p.jwpcdn.com/player/v/8.26.0/jwplayer.js"></script>
+<script> jwplayer.key = 'XSuP4qMl+9tK17QNb+4+th2Pm9AWgMO/cYH8CI0HGGr7bdjo';
 </script>
+</head>
+<body>
+<script type="text/javascript">
+function getParameterByName(name) {
+	name = name.replace(/[\[]/, "\[").replace(/[\]]/, "\]");
+	var regex = new RegExp("[\?&]" + name + "=([^&#]*)"),
+	results = regex.exec(location.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
+
+var get = getParameterByName('get');
+var key = getParameterByName('key');
+var key2 = getParameterByName('key2');
+</script>
+<div id="player"></div>
+<script type="text/javascript">
+var playerInstance = jwplayer("player");
+
+playerInstance.setup({
+	playlist: [{
+		"sources": [
+			{
+				"default": false,
+				"type": "dash",
+				"file": atob(get),
+				"drm": {
+					"clearkey": { "keyId": atob(key), "key": atob(key2) }
+				},
+				"label": "0"
+			}
+		]
+	}],
+	width: "100%",
+	height: "100%",
+	aspectratio: "16:9",
+        stretching: "bestfit",
+	mediaid: "player",
+        mute: false,
+	autostart: false,
+        language: "es",
+        logo: {
+            file: "",
+            hide: "false",
+            position: "top-left"
+        },
+	cast: {},
+	sharing: {}
+});
+playerInstance.on('ready', function() {
+    playerInstance.on('audioTracks', function() {
+        const tracks = playerInstance.getAudioTracks();
+        //console.log('Available audio tracks:', tracks);
+        for (let i = 0; i < tracks.length; i++) {
+            if (tracks[i].language === 'es') {
+                playerInstance.setCurrentAudioTrack(i);
+                //console.log('Selected Spanish audio track:', tracks[i]);
+                break;
+            }
+        }
+    });
+});
+// Preview Hack
+jwplayer().play();
+jwplayer().setMute(false);
+jwplayer().setControls(true);
+
+</script>
+</body>
