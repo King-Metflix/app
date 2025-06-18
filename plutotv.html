@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Canales M3U8</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 0;
+            overflow: hidden;
+        }
+        .search-container {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: #000;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgb(56, 254, 46);
+            margin-bottom: 10px;
+        }
+        #searchInput {
+            width: 92%;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #38fe2e;
+            border-radius: 5px;
+            background: #000;
+            color: #fff;
+            font-weight: 800;
+        }
+        .channel-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 50px;
+            justify-content: center;
+            max-height: calc(100vh - 80px);
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .channel {
+            width: 150px;
+            text-align: center;
+            color: #fff;
+        }
+        .channel img {
+            width: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .channel img:hover {
+            transform: scale(1.05);
+        }
+        .channel p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 800;
+        }
+        .channel-list::-webkit-scrollbar {
+            width: 10px;
+        }
+        .channel-list::-webkit-scrollbar-thumb {
+            background: #000;
+            border-radius: 5px;
+        }
+        .channel-list::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .channel-list::-webkit-scrollbar-track {
+            background: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Buscar canal...">
+        </div>
+        <div class="channel-list" id="channelList"></div>
+    </div>
+
+    <script>
+        // URL del archivo M3U
+        const m3uUrl = "https://raw.githubusercontent.com/HelmerLuzo/PlutoTV_HL/4c9e648d2c2b070f43648ca5b231156f5858f019/tv/m3u/PlutoTV_tv_MX.m3u";
+
+        // Canal de respaldo
+        const defaultChannel = {
+            name: "Canal de Respaldo",
+            url: "https://live-hls-web-aje.getaj.net/AJE/index.m3u8",
+            logo: "https://upload.wikimedia.org/wikipedia/commons/6/69/Al_Jazeera_English_Logo.png"
+        };
+
+        // Referencias al DOM
+        const channelList = document.getElementById("channelList");
+        const searchInput = document.getElementById("searchInput");
+
+        // Variable para almacenar los canales
+        let channels = [];
+
+        // Función para reproducir el video en la app Android
+        function playVideo(videoUrl) {
+            if (window.Android) {
+                window.Android.playVideo(videoUrl);
+            } else {
+                alert("no disponible");
+            }
+        }
+
+        // Cargar la lista M3U
+        async function loadM3U() {
+            try {
+                const response = await fetch(m3uUrl);
+                if (!response.ok) throw new Error("Error al cargar el archivo M3U");
+                const m3uText = await response.text();
+                parseM3U(m3uText);
+            } catch (error) {
+                console.error("Error al cargar el archivo M3U:", error);
+                createChannelElement(defaultChannel);
+            }
+        }
+
+        // Analizar el archivo M3U
+        function parseM3U(m3uText) {
+            const lines = m3uText.split("\n");
+            let channel = {};
+
+            lines.forEach(line => {
+                line = line.trim();
+                if (line.startsWith("#EXTINF:")) {
+                    const info = line.split(",");
+                    channel.name = info[1] || "Canal sin nombre";
+                    const attributes = line.match(/tvg-logo="(.*?)"/);
+                    channel.logo = attributes ? attributes[1] : "https://via.placeholder.com/150";
+                } else if (line.startsWith("http")) {
+                    channel.url = line;
+                    channels.push(channel);
+                    createChannelElement(channel);
+                    channel = {};
+                }
+            });
+
+            if (channels.length === 0) {
+                createChannelElement(defaultChannel);
+            }
+        }
+
+        // Crear un elemento de canal
+        function createChannelElement(channel) {
+            const channelDiv = document.createElement("div");
+            channelDiv.className = "channel";
+            channelDiv.dataset.name = channel.name.toLowerCase();
+
+            const img = document.createElement("img");
+            img.src = channel.logo;
+            img.alt = channel.name;
+            img.title = channel.name;
+            img.onclick = () => playVideo(channel.url);
+
+            channelDiv.appendChild(img);
+            const name = document.createElement("p");
+            name.textContent = channel.name;
+            channelDiv.appendChild(name);
+
+            channelList.appendChild(channelDiv);
+        }
+
+        // Filtrar canales
+        function filterChannels() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const channelElements = document.querySelectorAll(".channel");
+
+            channelElements.forEach(channel => {
+                const channelName = channel.dataset.name;
+                channel.style.display = channelName.includes(searchTerm) ? "block" : "none";
+            });
+        }
+
+        // Event Listener para el buscador
+        searchInput.addEventListener("input", filterChannels);
+
+        // Cargar la lista M3U al inicio
+        loadM3U();
+    </script>
+</body>
+</html>
