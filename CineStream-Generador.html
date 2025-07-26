@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineStream - Generador de Entradas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            color: #e50914;
+            font-weight: bold;
+        }
+
+        .nav a:link {
+            color: #fff;
+            font-size: 1.1rem;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: #e50914;
+        }
+
+        .generator {
+            padding: 100px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .generator h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+        }
+
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .search-form input,
+        .search-form select {
+            width: 100%;
+            padding: 10px;
+            background: #1f1f1f;
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+
+        .search-form input:focus,
+        .search-form select:focus {
+            background: #2a2a2a;
+            box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+            outline: none;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1f1f1f;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .suggestion-item img {
+            width: 30px;
+            height: 45px;
+            object-fit: cover;
+            margin-right: 8px;
+            border-radius: 4px;
+        }
+
+        .suggestion-item:hover {
+            background: #e50914;
+        }
+
+        .search-form button {
+            padding: 10px 15px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .search-form button:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+
+        .search-results {
+            margin: 20px 0;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .result-item {
+            background: #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .result-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(229, 9, 20, 0.5);
+        }
+
+        .result-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .result-item h3 {
+            font-size: 1rem;
+            padding: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .result-item p {
+            font-size: 0.85rem;
+            color: #ccc;
+            padding: 0 8px 8px;
+        }
+
+        .generated-code {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .generated-code h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+        }
+
+        .preview {
+            background: #1f1f1f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .generated-code pre {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+
+        .btn {
+            background: #e50914;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .result-item img {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <h1>CineStream</h1>
+        </div>
+        <nav class="nav">
+            <a href="#" aria-label="Inicio">Inicio</a>
+            <a href="#" aria-label="Películas">Películas</a>
+            <a href="#" aria-label="Series">Series</a>
+        </nav>
+    </header>
+
+    <section class="generator">
+        <h2>Generador de Entradas</h2>
+        <div class="search-form">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Busca una película o serie..." autocomplete="off" required aria-label="Buscar">
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+            <select id="mediaType" aria-label="Tipo de medio">
+                <option value="movie">Película</option>
+                <option value="tv">Serie</option>
+            </select>
+            <button id="searchBtn" aria-label="Buscar"><i class="fas fa-search"></i> Buscar</button>
+            <button id="resetBtn" class="btn" style="display: none;" aria-label="Reset"><i class="fas fa-times"></i> Reset</button>
+        </div>
+
+        <div id="searchResults" class="search-results"></div>
+
+        <div id="generatedCode" class="generated-code">
+            <h3>Código Generado</h3>
+            <div id="preview" class="preview"></div>
+            <pre id="codeOutput"></pre>
+            <button id="copyBtn" class="btn" disabled><i class="fas fa-copy"></i> Copiar</button>
+        </div>
+    </section>
+
+<script>
+    const API_KEY = 'b6083b855479a79fd9acdb0a2789f126';
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
+    const searchInput = document.getElementById('searchInput');
+    const mediaTypeSelect = document.getElementById('mediaType');
+    const searchBtn = document.getElementById('searchBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const suggestions = document.getElementById('suggestions');
+    const searchResults = document.getElementById('searchResults');
+    const preview = document.getElementById('preview');
+    const codeOutput = document.getElementById('codeOutput');
+    const copyBtn = document.getElementById('copyBtn');
+
+    // Inicializar localStorage
+    if (!localStorage.getItem('generatedMovies')) {
+        localStorage.setItem('generatedMovies', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('generatedSeries')) {
+        localStorage.setItem('generatedSeries', JSON.stringify([]));
+    }
+
+    // Escapar HTML
+    const escapeHTML = str => str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
+
+    // Copiar al portapapeles
+    const copyToClipboard = async text => {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (err) {
+            console.error('Error al copiar:', err);
+            return false;
+        }
+    };
+
+    // Búsqueda predictiva
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        const query = searchInput.value.trim();
+        if (query.length < 3) {
+            suggestions.innerHTML = '';
+            suggestions.style.display = 'none';
+            return;
+        }
+
+        searchTimeout = setTimeout(async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/search/${mediaTypeSelect.value}?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=es-ES`);
+                if (!response.ok) throw new Error('Error en búsqueda');
+                const { results } = await response.json();
+                suggestions.innerHTML = '';
+                if (!results?.length) {
+                    suggestions.style.display = 'none';
+                    return;
+                }
+
+                results.slice(0, 5).forEach(item => {
+                    const div = document.createElement('div');
+                    div.classList.add('suggestion-item');
+                    div.innerHTML = `
+                        <img src="${item.poster_path ? IMAGE_BASE_URL + item.poster_path : 'https://via.placeholder.com/30x45'}" alt="${escapeHTML(item.title || item.name)}">
+                        <span>${escapeHTML(item.title || item.name)}</span>
+                    `;
+                    div.addEventListener('click', () => {
+                        searchInput.value = item.title || item.name;
+                        suggestions.style.display = 'none';
+                        searchBtn.click();
+                    });
+                    suggestions.appendChild(div);
+                });
+                suggestions.style.display = 'block';
+            } catch (error) {
+                console.error('Error en búsqueda predictiva:', error);
+                suggestions.innerHTML = '<div class="suggestion-item">Error al buscar</div>';
+                suggestions.style.display = 'block';
+            }
+        }, 300);
+    });
+
+    // Búsqueda principal
+    searchBtn.addEventListener('click', async () => {
+        const query = searchInput.value.trim();
+        if (!query) {
+            alert('Ingresa un título.');
+            return;
+        }
+
+        searchResults.innerHTML = '<p>Cargando...</p>';
+        suggestions.style.display = 'none';
+
+        try {
+            const response = await fetch(`${BASE_URL}/search/${mediaTypeSelect.value}?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=es-ES`);
+            if (!response.ok) throw new Error('Error en búsqueda');
+            const { results } = await response.json();
+            searchResults.innerHTML = '';
+
+            if (!results?.length) {
+                searchResults.innerHTML = '<p>No hay resultados.</p>';
+                return;
+            }
+
+            const resultGrid = document.createElement('div');
+            resultGrid.classList.add('result-grid');
+            results.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('result-item');
+                div.innerHTML = `
+                    <img src="${item.poster_path ? IMAGE_BASE_URL + item.poster_path : 'https://via.placeholder.com/150x200'}" alt="${escapeHTML(item.title || item.name)}">
+                    <h3>${escapeHTML(item.title || item.name)}</h3>
+                    <p>${item.release_date || item.first_air_date || 'Sin fecha'}</p>
+                `;
+                div.addEventListener('click', () => selectItem(item.id, mediaTypeSelect.value, item.title || item.name, item.poster_path));
+                resultGrid.appendChild(div);
+            });
+            searchResults.appendChild(resultGrid);
+        } catch (error) {
+            console.error('Error en búsqueda:', error);
+            searchResults.innerHTML = '<p style="color: #e50914;">Error en la búsqueda.</p>';
+        }
+    });
+
+    // Generar modal
+    const generateModal = (id, type, mediaId, season = null, episode = null) => {
+        let src = '';
+        if (type === 'movie') {
+            src = `https://vidsrc.to/embed/movie/${mediaId}`;
+        } else if (type === 'series') {
+            src = `https://vidsrc.to/embed/tv/${mediaId}/${season}/${episode}`;
+        } else if (type === 'trailer') {
+            src = `https://www.youtube.com/embed/${mediaId}?autoplay=1`;
+        }
+        
+        return `
+        <div class="modal" id="${id}" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+            <div class="modal-content" style="background: #1f1f1f; border-radius: 15px; padding: 20px; max-width: 80%; position: relative; text-align: center;">
+                <button class="modal-close" onclick="document.getElementById('${id}').style.display='none';" style="position: absolute; top: 10px; right: 10px; background: #e50914; color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times"></i></button>
+                <iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 400px; border: none; border-radius: 10px;"></iframe>
+                ${type === 'series' ? `<button class="next-episode-btn" id="nextBtn${id}" style="margin-top: 15px; background: #e50914; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem;">Siguiente</button>` : ''}
+            </div>
+        </div>
+        `;
+    };
+
+    // Generar episodio
+    const generateEpisode = (ep, season, seriesId, seasonIndex, epIndex) => `
+        <div class="episode-item" onclick="document.getElementById('episodeModal${seasonIndex}${epIndex}').style.display='flex';" style="display: flex; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 8px; margin-bottom: 10px; color: #fff; cursor: pointer;">
+            <img src="${ep.poster}" alt="${escapeHTML(ep.name)}" style="width: 80px; height: 45px; margin-right: 10px; border-radius: 5px;">
+            <span class="episode-title" style="flex: 1; font-size: 0.95rem;">${escapeHTML(ep.name)}</span>
+        </div>
+        ${generateModal(`episodeModal${seasonIndex}${epIndex}`, 'series', seriesId, season.seasonNumber, ep.episodeNumber)}
+    `;
+
+    // Generar temporada
+    const generateSeason = async (season, seriesId, seasonIndex) => {
+        try {
+            const response = await fetch(`${BASE_URL}/tv/${seriesId}/season/${season.season_number}?api_key=${API_KEY}&language=es-ES`);
+            if (!response.ok) throw new Error('Error al obtener temporada');
+            const seasonData = await response.json();
+            const episodes = seasonData.episodes.map(ep => ({
+                name: ep.name || `Episodio ${ep.episode_number}`,
+                episodeNumber: ep.episode_number,
+                poster: ep.still_path ? IMAGE_BASE_URL + ep.still_path : 'https://via.placeholder.com/80x45'
+            }));
+
+            return `
+                <div class="season" style="margin-bottom: 20px;">
+                    <div class="season-header" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('active')" style="background: #2a2a2a; padding: 15px; border-radius: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="color: #e50914; font-size: 1.2rem;">${escapeHTML(seasonData.name || `Temporada ${season.season_number}`)}</h4>
+                        <i class="fas fa-chevron-down" style="color: #fff;"></i>
+                    </div>
+                    <div class="episodes" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                        ${episodes.length ? episodes.map((ep, epIndex) => generateEpisode(ep, { seasonNumber: season.season_number }, seriesId, seasonIndex, epIndex)).join('') : '<p>No hay episodios.</p>'}
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+            console.warn(`Error en temporada ${season.season_number}:`, error);
+            return '';
+        }
+    };
+
+    // Seleccionar item
+    async function selectItem(id, mediaType, title, posterPath) {
+        try {
+            const response = await fetch(`${BASE_URL}/${mediaType}/${id}?api_key=${API_KEY}&language=es-ES&append_to_response=genres,videos`);
+            if (!response.ok) throw new Error('Error al obtener datos');
+            const data = await response.json();
+
+            // Guardar en localStorage
+            const key = mediaType === 'movie' ? 'generatedMovies' : 'generatedSeries';
+            const items = JSON.parse(localStorage.getItem(key) || '[]');
+            if (!items.some(item => item.id === id)) {
+                items.push({ id, title, poster_path: posterPath ? IMAGE_BASE_URL + posterPath : 'https://via.placeholder.com/120x180' });
+                localStorage.setItem(key, JSON.stringify(items));
+            }
+
+            // Generar código
+            const genres = data.genres?.map(g => g.name).join(', ') || 'N/A';
+            const year = (data.release_date || data.first_air_date)?.split('-')[0] || 'N/A';
+            const duration = mediaType === 'movie' ? `${Math.floor((data.runtime || 0) / 60)}h ${(data.runtime || 0) % 60}m` : `${data.number_of_seasons || 0} temporadas`;
+            const trailer = data.videos?.results.find(v => v.type === 'Trailer' && v.site === 'YouTube')?.key || '';
+            const backdrop = data.backdrop_path ? IMAGE_BASE_URL + data.backdrop_path : 'https://via.placeholder.com/1280x720';
+            const poster = data.poster_path ? IMAGE_BASE_URL + data.poster_path : 'https://via.placeholder.com/120x180';
+            const overview = data.overview || 'Sin descripción';
+
+            // Generar HTML visible
+            let htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #fff;
+        }
+        .slider-item {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #1f1f1f;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+        .backdrop {
+            background: linear-gradient(rgba(0,0,0,0.7), #000), url('${backdrop}');
+            background-size: cover;
+            background-position: center;
+            padding: 200px 0;
+            border-radius: 20px 20px 0 0;
+        }
+        .content {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            align-items: flex-start;
+        }
+        .poster img {
+            width: 150px;
+            height: 225px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin-top: -150px;
+        }
+        .details {
+            flex: 1;
+        }
+        .title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .title span {
+            font-size: 1rem;
+            color: #ccc;
+            display: block;
+            margin: 5px 0;
+        }
+        .info {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            margin: 20px 0;
+            align-items: center;
+        }
+        .info i {
+            color: #e50914;
+            font-size: 1.2rem;
+        }
+        .trailer-btn, .play-btn {
+            background: #e50914;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .trailer-btn:hover, .play-btn:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+        .trailer-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .sinopsis {
+            padding: 20px;
+            background: #1f1f1f;
+            border-radius: 10px;
+        }
+        .sinopsis h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #e50914;
+        }
+        .seasons {
+            padding: 20px;
+            background: #1f1f1f;
+            border-radius: 10px;
+            margin: 20px;
+        }
+        .season {
+            margin-bottom: 20px;
+        }
+        .season-header {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .season-header:hover {
+            background: #3a3a3a;
+        }
+        .season-header h4 {
+            color: #e50914;
+            font-size: 1.2rem;
+        }
+        .season-header i {
+            color: #fff;
+        }
+        .season-header.active i {
+            transform: rotate(180deg);
+        }
+        .episodes {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .episodes.active {
+            max-height: 800px;
+            padding: 15px;
+        }
+        .episode-item {
+            display: flex;
+            align-items: center;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .episode-item:hover {
+            background: #3a3a3a;
+        }
+        .episode-item img {
+            width: 80px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .episode-title {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: #1f1f1f;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 80%;
+            position: relative;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+        .modal-content iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .modal-close:hover {
+            background: #b20710;
+        }
+        .next-episode-btn {
+            margin-top: 15px;
+            background: #e50914;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .next-episode-btn:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .backdrop {
+                padding: 150px 0;
+            }
+            .poster img {
+                width: 120px;
+                height: 180px;
+                margin-top: -120px;
+            }
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .modal-content iframe {
+                height: 250px;
+            }
+            .title h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-item">
+        <div class="backdrop"></div>
+        <div class="content">
+            <div class="poster"><img src="${poster}" alt="${escapeHTML(title)}"></div>
+            <div class="details">
+                <div class="title">
+                    <h2>${escapeHTML(title)}</h2>
+                    <span>Géneros: ${escapeHTML(genres)}</span>
+                    <span>Año: ${year}</span>
+                    <span>Duración: ${escapeHTML(duration)}</span>
+                </div>
+                <div class="info">
+                    <i class="fas fa-star"></i> ${(data.vote_average * 10).toFixed(0)}%
+                    ${trailer ? `<button class="trailer-btn" onclick="document.getElementById('trailerModal').style.display='flex';"><i class="fas fa-play-circle"></i> Tráiler</button>` : '<button class="trailer-btn" disabled><i class="fas fa-play-circle"></i> Sin Tráiler</button>'}
+                    <button class="play-btn" onclick="document.getElementById('movieModal').style.display='flex';"><i class="fas fa-play"></i> Reproducir</button>
+                </div>
+                <div class="sinopsis">
+                    <h3>Sinopsis</h3>
+                    <p>${escapeHTML(overview)}</p>
+                </div>
+`;
+
+            // Agregar temporadas para series
+            if (mediaType === 'tv') {
+                // Obtener información de temporadas
+                const seasonsResponse = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=es-ES`);
+                const seriesData = await seasonsResponse.json();
+                const seasons = seriesData.seasons || [];
+                
+                const seasonsHTML = await Promise.all(seasons.map((season, index) => generateSeason(season, id, index)));
+                htmlContent += `
+                <div class="seasons">
+                    <h3>Temporadas</h3>
+                    ${seasonsHTML.join('')}
+                </div>
+`;
+            }
+
+            htmlContent += `
+            </div>
+        </div>
+    </div>
+`;
+
+            // Agregar modales
+            htmlContent += generateModal('movieModal', 'movie', id);
+            if (trailer) {
+                htmlContent += generateModal('trailerModal', 'trailer', trailer);
+            }
+
+            // Agregar script
+            htmlContent += `
+    <script>
+        // Funcionalidad para expandir/contraer temporadas
+        document.querySelectorAll('.season-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const episodes = this.nextElementSibling;
+                episodes.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
+`;
+
+            // Mostrar HTML en la vista previa
+            preview.innerHTML = htmlContent;
+            preview.style.display = 'block';
+
+            // Mostrar el código completo en el área de código
+            codeOutput.textContent = htmlContent;
+            copyBtn.disabled = false;
+            resetBtn.style.display = 'block';
+        } catch (error) {
+            console.error('Error al generar:', error);
+            codeOutput.textContent = 'Error al generar la entrada.';
+            preview.innerHTML = '';
+            preview.style.display = 'none';
+            copyBtn.disabled = true;
+        }
+    }
+
+    // Copiar código
+    copyBtn.addEventListener('click', async () => {
+        const success = await copyToClipboard(codeOutput.textContent);
+        copyBtn.innerHTML = success ? '<i class="fas fa-check"></i> ¡Copiado!' : '<i class="fas fa-exclamation"></i> Error';
+        copyBtn.style.backgroundColor = success ? '#28a745' : '#dc3545';
+        setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+            copyBtn.style.backgroundColor = '#e50914';
+        }, 2000);
+    });
+
+    // Resetear formulario
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchResults.innerHTML = '';
+        preview.innerHTML = '';
+        preview.style.display = 'none';
+        codeOutput.textContent = '';
+        copyBtn.disabled = true;
+        resetBtn.style.display = 'none';
+    });
+
+    // Cerrar sugerencias
+    document.addEventListener('click', e => {
+        if (!searchInput.closest('.search-container').contains(e.target)) {
+            suggestions.style.display = 'none';
+        }
+    });
+
+    // Permitir búsqueda con Enter
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchBtn.click();
+        }
+    });
+</script>
+</body>
+</html>
