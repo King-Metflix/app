@@ -1,43 +1,893 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta content='IE=edge' http-equiv='X-UA-Compatible'/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineStream - Generador de Entradas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-<meta content='no-cache, mustrevalidate' http-equiv='Cache-Control'/>
+        body {
+            background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-  <title>King Metflix! - Películas online gratis</title>
-<style>
-    .hidden-image { display: none; }
-  </style>
-  <img class='hidden-image' src='https://i.postimg.cc/V6xbGfGp/20240818-144752-1.jpg'> </img> 
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 10;
+        }
 
-  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' name='viewport'/>
+        .logo h1 {
+            font-size: 2rem;
+            color: #e50914;
+            font-weight: bold;
+        }
 
-  
+        .nav a:link {
+            color: #fff;
+            font-size: 1.1rem;
+            text-decoration: none;
+            margin-left: 20px;
+            transition: color 0.3s;
+        }
 
-<meta content='Películas por internet, Pelis online , Canales en vivo, Tv en vivo gratis.' name='description'/>  
+        .nav a:hover {
+            color: #e50914;
+        }
 
-<meta content='https://i.postimg.cc/PqKcKyXW/20240817-175458-2.png' name='og:image'/>
+        .generator {
+            padding: 100px 20px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-  <meta content='King Metflix Gratis podras acceder y ver todas las Películasy series de estreno. .' name='keywords'/>
+        .generator h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+        }
 
-<meta content='King Metflix' name='author'/>
+        .search-form {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+        }
 
-<meta content='https://king-metflix.github.io/app' property='og:url'/>
-<meta content='KING METFLIX | PELÍCULAS POR INTERNET ' property='og:site_name'/>   
+        .search-container {
+            position: relative;
+            flex: 1;
+            min-width: 150px;
+        }
 
-    <link rel="icon" href="https://i.postimg.cc/PqKcKyXW/20240817-175458-2.png" type="image/x-icon">
+        .search-form input,
+        .search-form select {
+            width: 100%;
+            padding: 10px;
+            background: #1f1f1f;
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
 
-  
-<script type='text/javascript'>
-<!-- DHA
-var t="3c7363726970743e0d0a202020646f63756d656e742e6164644576656e744c697374656e657228262333393b636f6e746578746d656e75262333393b2c2066756e6374696f6e20286529207b0d0a20202020652e70726576656e7444656661756c7428293b0d0a20202020616c65727428262333393b41636365736f2064656e656761646f262333393b293b0d0a7d293b0d0a0d0a203c2f7363726970743e0d0a0d0a3c736372697074206c616e67756167653d274a6176617363726970742720747970653d27746578742f6a617661736372697074273e200d0a0d0a646f63756d656e742e6f6e636f6e746578746d656e75203d2066756e6374696f6e28297b72657475726e2066616c73657d200d0a0d0a3c2f7363726970743e0d0a20200d0a20203c73637269707420747970653d27746578742f6a617661736372697074273e0d0a20202020646f63756d656e742e6164644576656e744c697374656e657228262333393b636f6e746578746d656e75262333393b2c2066756e6374696f6e20286529207b0d0a2020202020202020652e70726576656e7444656661756c7428293b0d0a202020207d293b0d0a0d0a20202020646f63756d656e742e6f6e6b6579646f776e203d2066756e6374696f6e20286529207b0d0a202020202020202069662028652e6b6579436f6465203d3d2031323329207b0d0a20202020202020202020202072657475726e2066616c73653b0d0a20202020202020207d0d0a202020207d0d0a3c2f7363726970743e0d0a0d0a3c73637269707420747970653d27746578742f6a617661736372697074273e20646f63756d656e742e6f6e636f6e746578746d656e75203d2066756e6374696f6e28297b72657475726e2066616c73653b7d3c2f7363726970743e0d0a";for(i=0;i<t.length;i+=2){document.write(String.fromCharCode(parseInt(t.substr(i,2),16)));}
-//-->
+        .search-form input:focus,
+        .search-form select:focus {
+            background: #2a2a2a;
+            box-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+            outline: none;
+        }
+
+        .suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1f1f1f;
+            border-radius: 0 0 8px 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .suggestion-item img {
+            width: 30px;
+            height: 45px;
+            object-fit: cover;
+            margin-right: 8px;
+            border-radius: 4px;
+        }
+
+        .suggestion-item:hover {
+            background: #e50914;
+        }
+
+        .search-form button {
+            padding: 10px 15px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .search-form button:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+
+        .search-results {
+            margin: 20px 0;
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .result-item {
+            background: #1f1f1f;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .result-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(229, 9, 20, 0.5);
+        }
+
+        .result-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .result-item h3 {
+            font-size: 1rem;
+            padding: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .result-item p {
+            font-size: 0.85rem;
+            color: #ccc;
+            padding: 0 8px 8px;
+        }
+
+        .generated-code {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .generated-code h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(229, 9, 20, 0.5);
+        }
+
+        .preview {
+            background: #1f1f1f;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .generated-code pre {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            color: #ddd;
+        }
+
+        .btn {
+            background: #e50914;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s, transform 0.3s;
+        }
+
+        .btn:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+
+            .result-item img {
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <h1>CineStream</h1>
+        </div>
+        <nav class="nav">
+            <a href="#" aria-label="Inicio">Inicio</a>
+            <a href="#" aria-label="Películas">Películas</a>
+            <a href="#" aria-label="Series">Series</a>
+        </nav>
+    </header>
+
+    <section class="generator">
+        <h2>Generador de Entradas</h2>
+        <div class="search-form">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Busca una película o serie..." autocomplete="off" required aria-label="Buscar">
+                <div id="suggestions" class="suggestions"></div>
+            </div>
+            <select id="mediaType" aria-label="Tipo de medio">
+                <option value="movie">Película</option>
+                <option value="tv">Serie</option>
+            </select>
+            <button id="searchBtn" aria-label="Buscar"><i class="fas fa-search"></i> Buscar</button>
+            <button id="resetBtn" class="btn" style="display: none;" aria-label="Reset"><i class="fas fa-times"></i> Reset</button>
+        </div>
+
+        <div id="searchResults" class="search-results"></div>
+
+        <div id="generatedCode" class="generated-code">
+            <h3>Código Generado</h3>
+            <div id="preview" class="preview"></div>
+            <pre id="codeOutput"></pre>
+            <button id="copyBtn" class="btn" disabled><i class="fas fa-copy"></i> Copiar</button>
+        </div>
+    </section>
+
+<script>
+    const API_KEY = 'b6083b855479a79fd9acdb0a2789f126';
+    const BASE_URL = 'https://api.themoviedb.org/3';
+    const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+
+    const searchInput = document.getElementById('searchInput');
+    const mediaTypeSelect = document.getElementById('mediaType');
+    const searchBtn = document.getElementById('searchBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const suggestions = document.getElementById('suggestions');
+    const searchResults = document.getElementById('searchResults');
+    const preview = document.getElementById('preview');
+    const codeOutput = document.getElementById('codeOutput');
+    const copyBtn = document.getElementById('copyBtn');
+
+    // Inicializar localStorage
+    if (!localStorage.getItem('generatedMovies')) {
+        localStorage.setItem('generatedMovies', JSON.stringify([]));
+    }
+    if (!localStorage.getItem('generatedSeries')) {
+        localStorage.setItem('generatedSeries', JSON.stringify([]));
+    }
+
+    // Escapar HTML
+    const escapeHTML = str => str ? String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;') : '';
+
+    // Copiar al portapapeles
+    const copyToClipboard = async text => {
+        try {
+            await navigator.clipboard.writeText(text);
+            return true;
+        } catch (err) {
+            console.error('Error al copiar:', err);
+            return false;
+        }
+    };
+
+    // Búsqueda predictiva
+    let searchTimeout;
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimeout);
+        const query = searchInput.value.trim();
+        if (query.length < 3) {
+            suggestions.innerHTML = '';
+            suggestions.style.display = 'none';
+            return;
+        }
+
+        searchTimeout = setTimeout(async () => {
+            try {
+                const response = await fetch(`${BASE_URL}/search/${mediaTypeSelect.value}?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=es-ES`);
+                if (!response.ok) throw new Error('Error en búsqueda');
+                const { results } = await response.json();
+                suggestions.innerHTML = '';
+                if (!results?.length) {
+                    suggestions.style.display = 'none';
+                    return;
+                }
+
+                results.slice(0, 5).forEach(item => {
+                    const div = document.createElement('div');
+                    div.classList.add('suggestion-item');
+                    div.innerHTML = `
+                        <img src="${item.poster_path ? IMAGE_BASE_URL + item.poster_path : 'https://via.placeholder.com/30x45'}" alt="${escapeHTML(item.title || item.name)}">
+                        <span>${escapeHTML(item.title || item.name)}</span>
+                    `;
+                    div.addEventListener('click', () => {
+                        searchInput.value = item.title || item.name;
+                        suggestions.style.display = 'none';
+                        searchBtn.click();
+                    });
+                    suggestions.appendChild(div);
+                });
+                suggestions.style.display = 'block';
+            } catch (error) {
+                console.error('Error en búsqueda predictiva:', error);
+                suggestions.innerHTML = '<div class="suggestion-item">Error al buscar</div>';
+                suggestions.style.display = 'block';
+            }
+        }, 300);
+    });
+
+    // Búsqueda principal
+    searchBtn.addEventListener('click', async () => {
+        const query = searchInput.value.trim();
+        if (!query) {
+            alert('Ingresa un título.');
+            return;
+        }
+
+        searchResults.innerHTML = '<p>Cargando...</p>';
+        suggestions.style.display = 'none';
+
+        try {
+            const response = await fetch(`${BASE_URL}/search/${mediaTypeSelect.value}?api_key=${API_KEY}&query=${encodeURIComponent(query)}&language=es-ES`);
+            if (!response.ok) throw new Error('Error en búsqueda');
+            const { results } = await response.json();
+            searchResults.innerHTML = '';
+
+            if (!results?.length) {
+                searchResults.innerHTML = '<p>No hay resultados.</p>';
+                return;
+            }
+
+            const resultGrid = document.createElement('div');
+            resultGrid.classList.add('result-grid');
+            results.forEach(item => {
+                const div = document.createElement('div');
+                div.classList.add('result-item');
+                div.innerHTML = `
+                    <img src="${item.poster_path ? IMAGE_BASE_URL + item.poster_path : 'https://via.placeholder.com/150x200'}" alt="${escapeHTML(item.title || item.name)}">
+                    <h3>${escapeHTML(item.title || item.name)}</h3>
+                    <p>${item.release_date || item.first_air_date || 'Sin fecha'}</p>
+                `;
+                div.addEventListener('click', () => selectItem(item.id, mediaTypeSelect.value, item.title || item.name, item.poster_path));
+                resultGrid.appendChild(div);
+            });
+            searchResults.appendChild(resultGrid);
+        } catch (error) {
+            console.error('Error en búsqueda:', error);
+            searchResults.innerHTML = '<p style="color: #e50914;">Error en la búsqueda.</p>';
+        }
+    });
+
+    // Generar modal
+    const generateModal = (id, type, mediaId, season = null, episode = null) => {
+        let src = '';
+        if (type === 'movie') {
+            src = `https://vidsrc.to/embed/movie/${mediaId}`;
+        } else if (type === 'series') {
+            src = `https://vidsrc.to/embed/tv/${mediaId}/${season}/${episode}`;
+        } else if (type === 'trailer') {
+            src = `https://www.youtube.com/embed/${mediaId}?autoplay=1`;
+        }
+        
+        return `
+        <div class="modal" id="${id}" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); z-index: 2000; justify-content: center; align-items: center;">
+            <div class="modal-content" style="background: #1f1f1f; border-radius: 15px; padding: 20px; max-width: 80%; position: relative; text-align: center;">
+                <button class="modal-close" onclick="document.getElementById('${id}').style.display='none';" style="position: absolute; top: 10px; right: 10px; background: #e50914; color: #fff; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center;"><i class="fas fa-times"></i></button>
+                <iframe src="${src}" allow="autoplay; encrypted-media" allowfullscreen style="width: 100%; height: 400px; border: none; border-radius: 10px;"></iframe>
+                ${type === 'series' ? `<button class="next-episode-btn" id="nextBtn${id}" style="margin-top: 15px; background: #e50914; color: #fff; padding: 10px 20px; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem;">Siguiente</button>` : ''}
+            </div>
+        </div>
+        `;
+    };
+
+    // Generar episodio
+    const generateEpisode = (ep, season, seriesId, seasonIndex, epIndex) => `
+        <div class="episode-item" onclick="document.getElementById('episodeModal${seasonIndex}${epIndex}').style.display='flex';" style="display: flex; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 8px; margin-bottom: 10px; color: #fff; cursor: pointer;">
+            <img src="${ep.poster}" alt="${escapeHTML(ep.name)}" style="width: 80px; height: 45px; margin-right: 10px; border-radius: 5px;">
+            <span class="episode-title" style="flex: 1; font-size: 0.95rem;">${escapeHTML(ep.name)}</span>
+        </div>
+        ${generateModal(`episodeModal${seasonIndex}${epIndex}`, 'series', seriesId, season.seasonNumber, ep.episodeNumber)}
+    `;
+
+    // Generar temporada
+    const generateSeason = async (season, seriesId, seasonIndex) => {
+        try {
+            const response = await fetch(`${BASE_URL}/tv/${seriesId}/season/${season.season_number}?api_key=${API_KEY}&language=es-ES`);
+            if (!response.ok) throw new Error('Error al obtener temporada');
+            const seasonData = await response.json();
+            const episodes = seasonData.episodes.map(ep => ({
+                name: ep.name || `Episodio ${ep.episode_number}`,
+                episodeNumber: ep.episode_number,
+                poster: ep.still_path ? IMAGE_BASE_URL + ep.still_path : 'https://via.placeholder.com/80x45'
+            }));
+
+            return `
+                <div class="season" style="margin-bottom: 20px;">
+                    <div class="season-header" onclick="this.classList.toggle('active');this.nextElementSibling.classList.toggle('active')" style="background: #2a2a2a; padding: 15px; border-radius: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;">
+                        <h4 style="color: #e50914; font-size: 1.2rem;">${escapeHTML(seasonData.name || `Temporada ${season.season_number}`)}</h4>
+                        <i class="fas fa-chevron-down" style="color: #fff;"></i>
+                    </div>
+                    <div class="episodes" style="max-height: 0; overflow: hidden; transition: max-height 0.3s ease;">
+                        ${episodes.length ? episodes.map((ep, epIndex) => generateEpisode(ep, { seasonNumber: season.season_number }, seriesId, seasonIndex, epIndex)).join('') : '<p>No hay episodios.</p>'}
+                    </div>
+                </div>
+            `;
+        } catch (error) {
+            console.warn(`Error en temporada ${season.season_number}:`, error);
+            return '';
+        }
+    };
+
+    // Seleccionar item
+    async function selectItem(id, mediaType, title, posterPath) {
+        try {
+            const response = await fetch(`${BASE_URL}/${mediaType}/${id}?api_key=${API_KEY}&language=es-ES&append_to_response=genres,videos`);
+            if (!response.ok) throw new Error('Error al obtener datos');
+            const data = await response.json();
+
+            // Guardar en localStorage
+            const key = mediaType === 'movie' ? 'generatedMovies' : 'generatedSeries';
+            const items = JSON.parse(localStorage.getItem(key) || '[]');
+            if (!items.some(item => item.id === id)) {
+                items.push({ id, title, poster_path: posterPath ? IMAGE_BASE_URL + posterPath : 'https://via.placeholder.com/120x180' });
+                localStorage.setItem(key, JSON.stringify(items));
+            }
+
+            // Generar código
+            const genres = data.genres?.map(g => g.name).join(', ') || 'N/A';
+            const year = (data.release_date || data.first_air_date)?.split('-')[0] || 'N/A';
+            const duration = mediaType === 'movie' ? `${Math.floor((data.runtime || 0) / 60)}h ${(data.runtime || 0) % 60}m` : `${data.number_of_seasons || 0} temporadas`;
+            const trailer = data.videos?.results.find(v => v.type === 'Trailer' && v.site === 'YouTube')?.key || '';
+            const backdrop = data.backdrop_path ? IMAGE_BASE_URL + data.backdrop_path : 'https://via.placeholder.com/1280x720';
+            const poster = data.poster_path ? IMAGE_BASE_URL + data.poster_path : 'https://via.placeholder.com/120x180';
+            const overview = data.overview || 'Sin descripción';
+
+            // Generar HTML visible
+            let htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: linear-gradient(180deg, #0d0d0d 0%, #1a1a1a 100%);
+            color: #fff;
+        }
+        .slider-item {
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #1f1f1f;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+        .backdrop {
+            background: linear-gradient(rgba(0,0,0,0.7), #000), url('${backdrop}');
+            background-size: cover;
+            background-position: center;
+            padding: 200px 0;
+            border-radius: 20px 20px 0 0;
+        }
+        .content {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            align-items: flex-start;
+        }
+        .poster img {
+            width: 150px;
+            height: 225px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            margin-top: -150px;
+        }
+        .details {
+            flex: 1;
+        }
+        .title h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .title span {
+            font-size: 1rem;
+            color: #ccc;
+            display: block;
+            margin: 5px 0;
+        }
+        .info {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: #2a2a2a;
+            border-radius: 10px;
+            margin: 20px 0;
+            align-items: center;
+        }
+        .info i {
+            color: #e50914;
+            font-size: 1.2rem;
+        }
+        .trailer-btn, .play-btn {
+            background: #e50914;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .trailer-btn:hover, .play-btn:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+        .trailer-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        .sinopsis {
+            padding: 20px;
+            background: #1f1f1f;
+            border-radius: 10px;
+        }
+        .sinopsis h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #e50914;
+        }
+        .seasons {
+            padding: 20px;
+            background: #1f1f1f;
+            border-radius: 10px;
+            margin: 20px;
+        }
+        .season {
+            margin-bottom: 20px;
+        }
+        .season-header {
+            background: #2a2a2a;
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        .season-header:hover {
+            background: #3a3a3a;
+        }
+        .season-header h4 {
+            color: #e50914;
+            font-size: 1.2rem;
+        }
+        .season-header i {
+            color: #fff;
+        }
+        .season-header.active i {
+            transform: rotate(180deg);
+        }
+        .episodes {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .episodes.active {
+            max-height: 800px;
+            padding: 15px;
+        }
+        .episode-item {
+            display: flex;
+            align-items: center;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .episode-item:hover {
+            background: #3a3a3a;
+        }
+        .episode-item img {
+            width: 80px;
+            height: 45px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .episode-title {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-content {
+            background: #1f1f1f;
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 80%;
+            position: relative;
+            text-align: center;
+            animation: slideIn 0.3s ease;
+        }
+        .modal-content iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e50914;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .modal-close:hover {
+            background: #b20710;
+        }
+        .next-episode-btn {
+            margin-top: 15px;
+            background: #e50914;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s, transform 0.3s;
+        }
+        .next-episode-btn:hover {
+            background: #b20710;
+            transform: scale(1.05);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @media (max-width: 768px) {
+            .backdrop {
+                padding: 150px 0;
+            }
+            .poster img {
+                width: 120px;
+                height: 180px;
+                margin-top: -120px;
+            }
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .modal-content iframe {
+                height: 250px;
+            }
+            .title h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider-item">
+        <div class="backdrop"></div>
+        <div class="content">
+            <div class="poster"><img src="${poster}" alt="${escapeHTML(title)}"></div>
+            <div class="details">
+                <div class="title">
+                    <h2>${escapeHTML(title)}</h2>
+                    <span>Géneros: ${escapeHTML(genres)}</span>
+                    <span>Año: ${year}</span>
+                    <span>Duración: ${escapeHTML(duration)}</span>
+                </div>
+                <div class="info">
+                    <i class="fas fa-star"></i> ${(data.vote_average * 10).toFixed(0)}%
+                    ${trailer ? `<button class="trailer-btn" onclick="document.getElementById('trailerModal').style.display='flex';"><i class="fas fa-play-circle"></i> Tráiler</button>` : '<button class="trailer-btn" disabled><i class="fas fa-play-circle"></i> Sin Tráiler</button>'}
+                    <button class="play-btn" onclick="document.getElementById('movieModal').style.display='flex';"><i class="fas fa-play"></i> Reproducir</button>
+                </div>
+                <div class="sinopsis">
+                    <h3>Sinopsis</h3>
+                    <p>${escapeHTML(overview)}</p>
+                </div>
+`;
+
+            // Agregar temporadas para series
+            if (mediaType === 'tv') {
+                // Obtener información de temporadas
+                const seasonsResponse = await fetch(`${BASE_URL}/tv/${id}?api_key=${API_KEY}&language=es-ES`);
+                const seriesData = await seasonsResponse.json();
+                const seasons = seriesData.seasons || [];
+                
+                const seasonsHTML = await Promise.all(seasons.map((season, index) => generateSeason(season, id, index)));
+                htmlContent += `
+                <div class="seasons">
+                    <h3>Temporadas</h3>
+                    ${seasonsHTML.join('')}
+                </div>
+`;
+            }
+
+            htmlContent += `
+            </div>
+        </div>
+    </div>
+`;
+
+            // Agregar modales
+            htmlContent += generateModal('movieModal', 'movie', id);
+            if (trailer) {
+                htmlContent += generateModal('trailerModal', 'trailer', trailer);
+            }
+
+            // Agregar script
+            htmlContent += `
+    <script>
+        // Funcionalidad para expandir/contraer temporadas
+        document.querySelectorAll('.season-header').forEach(header => {
+            header.addEventListener('click', function() {
+                this.classList.toggle('active');
+                const episodes = this.nextElementSibling;
+                episodes.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
+`;
+
+            // Mostrar HTML en la vista previa
+            preview.innerHTML = htmlContent;
+            preview.style.display = 'block';
+
+            // Mostrar el código completo en el área de código
+            codeOutput.textContent = htmlContent;
+            copyBtn.disabled = false;
+            resetBtn.style.display = 'block';
+        } catch (error) {
+            console.error('Error al generar:', error);
+            codeOutput.textContent = 'Error al generar la entrada.';
+            preview.innerHTML = '';
+            preview.style.display = 'none';
+            copyBtn.disabled = true;
+        }
+    }
+
+    // Copiar código
+    copyBtn.addEventListener('click', async () => {
+        const success = await copyToClipboard(codeOutput.textContent);
+        copyBtn.innerHTML = success ? '<i class="fas fa-check"></i> ¡Copiado!' : '<i class="fas fa-exclamation"></i> Error';
+        copyBtn.style.backgroundColor = success ? '#28a745' : '#dc3545';
+        setTimeout(() => {
+            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar';
+            copyBtn.style.backgroundColor = '#e50914';
+        }, 2000);
+    });
+
+    // Resetear formulario
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        searchResults.innerHTML = '';
+        preview.innerHTML = '';
+        preview.style.display = 'none';
+        codeOutput.textContent = '';
+        copyBtn.disabled = true;
+        resetBtn.style.display = 'none';
+    });
+
+    // Cerrar sugerencias
+    document.addEventListener('click', e => {
+        if (!searchInput.closest('.search-container').contains(e.target)) {
+            suggestions.style.display = 'none';
+        }
+    });
+
+    // Permitir búsqueda con Enter
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchBtn.click();
+        }
+    });
 </script>
-
-<script type="text/javascript">
-<!-- DHA -->
-<!--
-document.write(unescape('%20%20%20%3C%6C%69%6E%6B%20%72%65%6C%3D%22%69%63%6F%6E%22%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%69%2E%70%6F%73%74%69%6D%67%2E%63%63%2F%50%71%4B%63%4B%79%58%57%2F%32%30%32%34%30%38%31%37%2D%31%37%35%34%35%38%2D%32%2E%70%6E%67%22%20%74%79%70%65%3D%22%69%6D%61%67%65%2F%78%2D%69%63%6F%6E%22%3E%0A%3C%6C%69%6E%6B%20%72%65%6C%3D%22%73%74%79%6C%65%73%68%65%65%74%22%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%63%64%6E%6A%73%2E%63%6C%6F%75%64%66%6C%61%72%65%2E%63%6F%6D%2F%61%6A%61%78%2F%6C%69%62%73%2F%66%6F%6E%74%2D%61%77%65%73%6F%6D%65%2F%36%2E%30%2E%30%2D%62%65%74%61%33%2F%63%73%73%2F%61%6C%6C%2E%6D%69%6E%2E%63%73%73%22%3E%0A%0A%20%20%20%20%3C%6C%69%6E%6B%20%72%65%6C%3D%22%73%74%79%6C%65%73%68%65%65%74%22%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%64%6C%2E%64%72%6F%70%62%6F%78%2E%63%6F%6D%2F%73%63%6C%2F%66%69%2F%37%71%71%75%36%37%76%32%34%63%61%76%74%74%72%72%6B%6D%7A%6A%6C%2F%61%6C%6C%2E%6D%69%6E%2E%63%73%73%3F%72%6C%6B%65%79%3D%65%6C%75%6F%64%72%6C%35%6A%67%70%77%66%66%76%7A%37%39%38%77%75%79%31%6C%31%26%64%6C%3D%30%22%3E%0A%20%20%20%20%3C%73%74%79%6C%65%3E%0A%20%20%20%20%20%20%20%20%2F%2A%20%45%73%74%69%6C%6F%73%20%67%65%6E%65%72%61%6C%65%73%20%2A%2F%0A%20%20%20%20%20%20%20%20%62%6F%64%79%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6D%61%72%67%69%6E%3A%20%30%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%70%61%64%64%69%6E%67%3A%20%30%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%6F%6E%74%2D%66%61%6D%69%6C%79%3A%20%27%41%72%69%61%6C%27%2C%20%73%61%6E%73%2D%73%65%72%69%66%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%61%63%6B%67%72%6F%75%6E%64%3A%20%75%72%6C%28%27%68%74%74%70%73%3A%2F%2F%69%2E%62%6C%6F%67%73%2E%65%73%2F%65%37%63%33%65%33%2F%79%74%2D%65%66%69%6C%6D%2F%31%33%36%36%5F%32%30%30%30%2E%6A%70%67%27%29%20%63%65%6E%74%65%72%2F%63%6F%76%65%72%20%6E%6F%2D%72%65%70%65%61%74%20%66%69%78%65%64%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%64%69%73%70%6C%61%79%3A%20%66%6C%65%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6C%69%67%6E%2D%69%74%65%6D%73%3A%20%63%65%6E%74%65%72%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6A%75%73%74%69%66%79%2D%63%6F%6E%74%65%6E%74%3A%20%63%65%6E%74%65%72%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%68%65%69%67%68%74%3A%20%38%30%76%68%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6F%76%65%72%66%6C%6F%77%3A%20%68%69%64%64%65%6E%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%6D%6F%76%65%42%61%63%6B%67%72%6F%75%6E%64%20%33%30%73%20%6C%69%6E%65%61%72%20%69%6E%66%69%6E%69%74%65%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%40%6B%65%79%66%72%61%6D%65%73%20%6D%6F%76%65%42%61%63%6B%67%72%6F%75%6E%64%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%30%25%20%7B%20%62%61%63%6B%67%72%6F%75%6E%64%2D%70%6F%73%69%74%69%6F%6E%3A%20%30%20%30%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%31%30%30%25%20%7B%20%62%61%63%6B%67%72%6F%75%6E%64%2D%70%6F%73%69%74%69%6F%6E%3A%20%31%30%30%25%20%30%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%2F%2A%20%43%61%70%61%20%64%65%20%73%75%70%65%72%70%6F%73%69%63%69%F3%6E%20%2A%2F%0A%20%20%20%20%20%20%20%20%2E%6F%76%65%72%6C%61%79%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%70%6F%73%69%74%69%6F%6E%3A%20%66%69%78%65%64%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%77%69%64%74%68%3A%20%31%30%30%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%68%65%69%67%68%74%3A%20%31%30%30%25%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%6F%70%3A%20%30%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6C%65%66%74%3A%20%30%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%61%63%6B%67%72%6F%75%6E%64%2D%63%6F%6C%6F%72%3A%20%72%67%62%61%28%30%2C%20%30%2C%20%30%2C%20%30%2E%36%29%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%2F%2A%20%43%6F%6E%74%65%6E%65%64%6F%72%20%70%72%69%6E%63%69%70%61%6C%20%2A%2F%0A%20%20%20%20%20%20%20%20%2E%63%6F%6E%74%61%69%6E%65%72%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%65%78%74%2D%61%6C%69%67%6E%3A%20%63%65%6E%74%65%72%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%63%6F%6C%6F%72%3A%20%23%66%66%66%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7A%2D%69%6E%64%65%78%3A%20%31%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%66%61%64%65%49%6E%20%31%73%20%65%61%73%65%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%40%6B%65%79%66%72%61%6D%65%73%20%66%61%64%65%49%6E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%72%6F%6D%20%7B%20%6F%70%61%63%69%74%79%3A%20%30%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%6F%20%7B%20%6F%70%61%63%69%74%79%3A%20%31%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%2F%2A%20%4C%6F%67%6F%20%2A%2F%0A%20%20%20%20%20%20%20%20%23%6C%6F%67%6F%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6D%61%72%67%69%6E%3A%20%33%65%6D%20%30%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%62%6F%75%6E%63%65%49%6E%20%31%73%20%65%61%73%65%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%40%6B%65%79%66%72%61%6D%65%73%20%62%6F%75%6E%63%65%49%6E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%72%6F%6D%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%73%63%61%6C%65%28%30%2E%35%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%6F%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%73%63%61%6C%65%28%31%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%23%6C%6F%67%6F%20%69%6D%67%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%77%69%64%74%68%3A%20%36%30%25%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%2F%2A%20%49%63%6F%6E%6F%73%20%73%6F%63%69%61%6C%65%73%20%2A%2F%0A%20%20%20%20%20%20%20%20%23%73%6F%63%69%61%6C%2D%69%63%6F%6E%73%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%64%69%73%70%6C%61%79%3A%20%66%6C%65%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6A%75%73%74%69%66%79%2D%63%6F%6E%74%65%6E%74%3A%20%63%65%6E%74%65%72%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6D%61%72%67%69%6E%2D%62%6F%74%74%6F%6D%3A%20%32%30%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%73%6C%69%64%65%49%6E%20%31%73%20%65%61%73%65%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%40%6B%65%79%66%72%61%6D%65%73%20%73%6C%69%64%65%49%6E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%72%6F%6D%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%74%72%61%6E%73%6C%61%74%65%59%28%2D%35%30%70%78%29%3B%20%6F%70%61%63%69%74%79%3A%20%30%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%6F%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%74%72%61%6E%73%6C%61%74%65%59%28%30%29%3B%20%6F%70%61%63%69%74%79%3A%20%31%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%23%73%6F%63%69%61%6C%2D%69%63%6F%6E%73%20%69%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%6F%6E%74%2D%73%69%7A%65%3A%20%33%34%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%63%6F%6C%6F%72%3A%20%23%66%66%66%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6D%61%72%67%69%6E%3A%20%30%20%31%30%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%72%61%6E%73%69%74%69%6F%6E%3A%20%63%6F%6C%6F%72%20%30%2E%33%73%20%65%61%73%65%2D%69%6E%2D%6F%75%74%3B%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%0A%20%20%20%20%20%20%20%20%23%73%6F%63%69%61%6C%2D%69%63%6F%6E%73%20%69%3A%68%6F%76%65%72%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%63%6F%6C%6F%72%3A%20%23%35%30%45%42%45%43%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%2F%2A%20%54%ED%74%75%6C%6F%73%20%2A%2F%0A%20%20%20%20%20%20%20%20%68%31%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%6F%6E%74%2D%73%69%7A%65%3A%20%32%65%6D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6D%61%72%67%69%6E%2D%62%6F%74%74%6F%6D%3A%20%31%30%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%66%61%64%65%49%6E%55%70%20%31%73%20%65%61%73%65%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%40%6B%65%79%66%72%61%6D%65%73%20%66%61%64%65%49%6E%55%70%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%72%6F%6D%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%74%72%61%6E%73%6C%61%74%65%59%28%35%30%70%78%29%3B%20%6F%70%61%63%69%74%79%3A%20%30%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%6F%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%74%72%61%6E%73%6C%61%74%65%59%28%30%29%3B%20%6F%70%61%63%69%74%79%3A%20%31%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%68%32%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%6F%6E%74%2D%73%69%7A%65%3A%20%31%2E%35%65%6D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%6D%61%72%67%69%6E%2D%62%6F%74%74%6F%6D%3A%20%32%30%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%66%61%64%65%49%6E%55%70%20%31%73%20%65%61%73%65%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%2F%2A%20%42%6F%74%F3%6E%20%64%65%20%64%65%73%63%61%72%67%61%20%2A%2F%0A%20%20%20%20%20%20%20%20%23%64%6F%77%6E%6C%6F%61%64%2D%62%74%6E%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%64%69%73%70%6C%61%79%3A%20%69%6E%6C%69%6E%65%2D%62%6C%6F%63%6B%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%70%61%64%64%69%6E%67%3A%20%31%35%70%78%20%33%30%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%66%6F%6E%74%2D%73%69%7A%65%3A%20%31%2E%35%65%6D%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%61%63%6B%67%72%6F%75%6E%64%2D%63%6F%6C%6F%72%3A%20%23%30%31%61%39%66%38%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%63%6F%6C%6F%72%3A%20%23%66%66%66%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%65%78%74%2D%64%65%63%6F%72%61%74%69%6F%6E%3A%20%6E%6F%6E%65%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%6F%72%64%65%72%2D%72%61%64%69%75%73%3A%20%32%35%70%78%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%74%72%61%6E%73%69%74%69%6F%6E%3A%20%62%61%63%6B%67%72%6F%75%6E%64%2D%63%6F%6C%6F%72%20%30%2E%33%73%20%65%61%73%65%2D%69%6E%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%61%6E%69%6D%61%74%69%6F%6E%3A%20%70%75%6C%73%65%20%31%2E%35%73%20%69%6E%66%69%6E%69%74%65%20%65%61%73%65%2D%69%6E%2D%6F%75%74%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%6F%78%2D%73%68%61%64%6F%77%3A%20%30%20%34%70%78%20%38%70%78%20%72%67%62%61%28%30%2C%20%30%2C%20%30%2C%20%30%2E%31%29%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%6F%72%64%65%72%3A%20%6E%6F%6E%65%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%23%64%6F%77%6E%6C%6F%61%64%2D%62%74%6E%3A%68%6F%76%65%72%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%62%61%63%6B%67%72%6F%75%6E%64%2D%63%6F%6C%6F%72%3A%20%23%30%30%35%36%62%33%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%40%6B%65%79%66%72%61%6D%65%73%20%70%75%6C%73%65%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%30%25%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%73%63%61%6C%65%28%30%2E%39%35%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%35%30%25%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%73%63%61%6C%65%28%31%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%20%20%20%20%31%30%30%25%20%7B%20%74%72%61%6E%73%66%6F%72%6D%3A%20%73%63%61%6C%65%28%30%2E%39%35%29%3B%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%3C%2F%73%74%79%6C%65%3E%0A%3C%2F%68%65%61%64%3E%0A%3C%62%6F%64%79%3E%0A%20%20%20%20%0A%20%20%20%20%3C%64%69%76%20%63%6C%61%73%73%3D%22%6F%76%65%72%6C%61%79%22%3E%3C%2F%64%69%76%3E%0A%20%20%20%20%3C%64%69%76%20%63%6C%61%73%73%3D%22%63%6F%6E%74%61%69%6E%65%72%22%3E%0A%20%20%20%20%20%20%20%20%3C%64%69%76%20%69%64%3D%22%6C%6F%67%6F%22%3E%0A%20%20%20%20%20%20%20%20%3C%69%6D%67%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%69%2E%70%6F%73%74%69%6D%67%2E%63%63%2F%34%33%47%79%62%43%72%34%2F%32%30%32%34%30%38%31%37%2D%32%30%30%38%30%33%2D%31%2E%70%6E%67%22%20%61%6C%74%3D%22%4B%69%6E%67%4D%65%74%66%6C%69%78%22%3E%0A%20%20%20%20%20%20%20%20%3C%2F%64%69%76%3E%0A%20%20%20%20%20%20%20%20%3C%64%69%76%20%69%64%3D%22%73%6F%63%69%61%6C%2D%69%63%6F%6E%73%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%61%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%77%77%77%2E%66%61%63%65%62%6F%6F%6B%2E%63%6F%6D%2F%70%72%6F%66%69%6C%65%2E%70%68%70%3F%69%64%3D%31%30%30%30%38%38%30%39%30%38%38%36%33%31%35%22%20%61%72%69%61%2D%6C%61%62%65%6C%3D%22%46%61%63%65%62%6F%6F%6B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%69%20%63%6C%61%73%73%3D%22%66%61%62%20%66%61%2D%66%61%63%65%62%6F%6F%6B%2D%66%22%3E%3C%2F%69%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2F%61%3E%0A%0A%20%3C%61%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%77%77%77%2E%69%6E%73%74%61%67%72%61%6D%2E%63%6F%6D%2F%64%6F%72%69%61%6E%5F%64%75%61%72%74%33%3F%69%67%73%68%3D%59%7A%6C%6A%59%54%6B%31%4F%44%67%33%5A%67%3D%3D%22%20%61%72%69%61%2D%6C%61%62%65%6C%3D%22%49%6E%73%74%61%67%72%61%6D%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%69%20%63%6C%61%73%73%3D%27%66%61%2D%62%72%61%6E%64%73%20%66%61%2D%69%6E%73%74%61%67%72%61%6D%27%2F%3E%3C%2F%69%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2F%61%3E%0A%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%61%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%74%69%6B%74%6F%6B%2E%63%6F%6D%2F%40%6B%69%6E%67%6D%65%74%66%6C%69%78%22%20%61%72%69%61%2D%6C%61%62%65%6C%3D%22%74%69%6B%74%6F%6B%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%3C%69%20%63%6C%61%73%73%3D%27%66%61%2D%62%72%61%6E%64%73%20%66%61%2D%74%69%6B%74%6F%6B%27%2F%3E%3C%2F%69%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2F%61%3E%0A%0A%20%20%20%20%20%20%20%20%3C%2F%64%69%76%3E%0A%20%20%20%20%20%20%20%20%3C%68%31%3E%50%65%6C%ED%63%75%6C%61%73%20%79%20%73%65%72%69%65%73%20%67%72%61%74%69%73%2E%3C%2F%68%31%3E%0A%20%20%20%20%20%20%20%20%3C%68%32%3E%A1%44%69%73%66%72%75%74%61%20%64%65%20%65%6C%20%6D%65%6A%6F%72%20%65%6E%74%72%65%74%65%6E%69%6D%69%65%6E%74%6F%20%65%6E%20%6E%75%65%73%74%72%61%20%61%70%6C%69%63%61%63%69%F3%6E%21%3C%2F%68%32%3E%0A%20%20%20%20%20%20%20%20%3C%61%20%68%72%65%66%3D%22%68%74%74%70%73%3A%2F%2F%64%6C%2E%64%72%6F%70%62%6F%78%2E%63%6F%6D%2F%73%63%6C%2F%66%69%2F%78%6C%30%7A%74%6A%6C%30%62%66%6D%75%6E%33%36%39%36%66%65%78%64%2F%4B%69%6E%67%2D%4D%65%74%66%6C%69%78%2E%61%70%6B%3F%72%6C%6B%65%79%3D%63%6F%6C%35%77%66%75%31%70%66%33%7A%74%73%37%6B%71%79%64%64%79%68%78%6D%74%26%73%74%3D%69%33%70%71%30%73%78%37%26%64%6C%3D%30%22%20%69%64%3D%22%64%6F%77%6E%6C%6F%61%64%2D%62%74%6E%22%3E%44%65%73%63%61%72%67%61%72%20%41%68%6F%72%61%3C%2F%61%3E%3C%62%72%3E%3C%62%72%3E%0A%0A%0A%20%20%20%20%20%20%20%20%20%20%3C%64%69%76%20%63%6C%61%73%73%3D%22%73%68%61%72%65%74%68%69%73%2D%69%6E%6C%69%6E%65%2D%73%68%61%72%65%2D%62%75%74%74%6F%6E%73%22%3E%3C%2F%64%69%76%3E%0A%3C%73%63%72%69%70%74%20%74%79%70%65%3D%22%74%65%78%74%2F%6A%61%76%61%73%63%72%69%70%74%22%20%73%72%63%3D%22%68%74%74%70%73%3A%2F%2F%70%6C%61%74%66%6F%72%6D%2D%61%70%69%2E%73%68%61%72%65%74%68%69%73%2E%63%6F%6D%2F%6A%73%2F%73%68%61%72%65%74%68%69%73%2E%6A%73%23%70%72%6F%70%65%72%74%79%3D%36%35%30%34%37%36%64%31%33%62%38%34%35%30%30%30%31%61%63%34%35%65%63%37%26%70%72%6F%64%75%63%74%3D%69%6E%6C%69%6E%65%2D%73%68%61%72%65%2D%62%75%74%74%6F%6E%73%26%73%6F%75%72%63%65%3D%70%6C%61%74%66%6F%72%6D%22%20%61%73%79%6E%63%3D%22%61%73%79%6E%63%22%3E%3C%2F%73%63%72%69%70%74%3E%0A%20%20%20%20%3C%2F%64%69%76%3E%0A%0A%20%0A%0A%20%20%0A%0A%3C%2F%62%6F%64%79%3E%0A%3C%2F%68%74%6D%6C%3E%0A'));
-//-->
-</script>
+</body>
+</html>
