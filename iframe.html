@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe Loader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background:#000;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            backgroud:#000;
+        }
+    </style>
+</head>
+<body>
+    <body ondragstart="return false;">
+    <iframe id="contentFrame"></iframe>
+
+    <script>
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const targetUrl = urlParams.get('get');
+
+        
+        if (targetUrl) {
+            try {
+                
+                const validUrl = targetUrl.startsWith('http://') || targetUrl.startsWith('https://') 
+                    ? targetUrl 
+                    : 'https://' + targetUrl;
+                
+                
+                document.getElementById('contentFrame').src = validUrl;
+            } catch (error) {
+                console.error('URL inválida:', error);
+                document.body.innerHTML = '<h1>Error: URL no válida</h1>';
+            }
+        } else {
+            document.body.innerHTML = '<h1>Error: No se proporcionó ninguna URL</h1>';
+        }
+    </script>
+</body>
+</html>
