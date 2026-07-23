@@ -24,6 +24,17 @@
     "X-Did": "0fc0e59075491624"
   }
       },
+        {
+    "titulo": "Distrito Comedia",
+    "enlace": "http://tv.m3uts.xyz/stream/secure/6r_GolEc/293.m3u8",
+    "userAgent": "Magma Player/10",
+    "headers": {
+      "X-App": "ps",
+      "X-Version": "10/1.0.9",
+      "X-Did": "0fc0e59075491624",
+      "X-Hash": "293"
+    }
+  },
       {
   "titulo": "Mundial OP1",
   "enlace": "http://tv.m3uts.xyz/stream/secure/6r_GolEc/1178.m3u8",
