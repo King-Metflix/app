@@ -5415,17 +5415,7 @@
           "X-Hash": "969"
         }
       },
-      {
-        "titulo": "Tigo Sports Guatemala",
-        "enlace": "http://tv.m3uts.xyz/stream/secure/6r_GolEc/904.m3u8",
-        "userAgent": "Magma Player/10",
-        "headers": {
-          "X-App": "ps",
-          "X-Version": "10/1.0.9",
-          "X-Did": "0fc0e59075491624",
-          "X-Hash": "904"
-        }
-      },
+
       {
         "titulo": "Vix Deportes 7",
         "enlace": "http://tv.m3uts.xyz/stream/secure/6r_GolEc/1138.m3u8",
